@@ -33,5 +33,6 @@
     pip install -r requirements.txt
     ```
 
-3. Run the Flask server
-4. Run the Streamlit app
+3. Setup environment variables (copy the `.env.example` file to `.env` and fill in the values)
+4. Run the Flask server
+5. Run the Streamlit app
