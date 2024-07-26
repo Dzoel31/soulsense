@@ -7,6 +7,8 @@ from streamlit_chat import message
 from dotenv import load_dotenv
 import os
 import time
+from statistics import mean
+import math
 
 load_dotenv(verbose=True)
 
@@ -116,9 +118,8 @@ if st.session_state.step >= 1:
 # Step 2 - Expression Checker
 if st.session_state.step >= 2:
     st.session_state.next_clicked = False
-    st.header("Expression Checker")
-    st.write(""":orange-background[In this part, you can take a picture of your face using the camera or upload an image from your device. 
-    The uploaded image will be analyzed to detect your facial expression.]""")
+    st.header("Emotion Checker")
+    st.write(""":orange-background[Tahap ini akan membantu anda mengetahui ekspresi wajah anda. Silahkan pilih opsi di bawah ini untuk melanjutkan.]""")
     # Pilihan mengambil gambar atau upload gambar
     upload_option = st.radio("Pilih opsi berikut:", ("Buka kamera", "Unggah dari perangkat"))
 
@@ -155,10 +156,15 @@ if st.session_state.step >= 2:
 if st.session_state.step >= 3:
     st.session_state.next_clicked = False
     st.header("Pulse Monitor")
-    st.write(""":orange-background[In this part, you will use a device to check your pulse rate. Based on the entered pulse rate, 
-    your stress level will be calculated and displayed.]""")
+    st.write(
+        """:orange-background[Pada tahap ini, aplikasi akan mengambil data detak jantung anda dari sensor. Silakan klik tombol di bawah ini dan letakkan jari anda pada sensor.]"""
+    )
+    # Note
+    st.write(
+        """Note: Kami mengukur rata-rata detak jantung anda dalam 1 menit."""
+    )
 
-    check_heart_rate = st.button("Check Heart Rate")
+    check_heart_rate = st.button("Cek detak jantung")
 
     if check_heart_rate:
         if not st.session_state.data_heart_rate:
@@ -173,7 +179,8 @@ if st.session_state.step >= 3:
                     time.sleep(10)
 
     if st.session_state.data_heart_rate:
-        heart_rate = st.session_state.data_heart_rate[-1]["value"]
+        heart_rate_list = [data["value"] for data in st.session_state.data_heart_rate]
+        heart_rate = math.ceil(mean(heart_rate_list))
     
 
         dict_stress_level = {
@@ -208,7 +215,7 @@ def create_chatbot_container():
 # Step 4 - Result
 if st.session_state.step >= 4:
     if not st.session_state.image_uploaded:
-        st.write('#### :red[Complete your data on] :orange[Expression Checker.]')
+        st.write('#### :red[Lengkapi data anda dahulu pada] :orange[Emotion Checker").]')
     elif st.session_state.heart_rate_checked:
         if len(st.session_state.chat_history) == 0:
             conclusion_json = {
@@ -230,7 +237,7 @@ if st.session_state.step >= 4:
             )
 
         if True:
-            st.write(f'##### Hi, :orange[{user_name}]. This is your souls\'s examination result based on your data collect.')
+            st.write(f'##### Hi, :orange[{user_name}]. Berikut adalah hasil dari data yang telah anda inputkan.')
             with st.container():
                 for chat in st.session_state.chat_history:
                     if chat["user"]:
