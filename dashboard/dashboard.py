@@ -227,56 +227,57 @@ if selected == "Dashboard":
             st.write('#### :red[Lengkapi data anda dahulu pada] :orange[Emotion Checker").]')
         elif st.session_state.heart_rate_checked:
             if len(st.session_state.chat_history) == 0:
-                conclusion_json = {
-                    "model": "llama3",
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": create_prompt(class_name[index_class], heart_rate)
-                        }
-                    ],
-                    "stream": False
-                }
-                response = get_response(conclusion_json)
-                st.session_state.chat_history.append(
-                    {
-                        "user": None,
-                        "bot": response
+                with st.spinner("Memproses data..."):
+                    conclusion_json = {
+                        "model": "llama3",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": create_prompt(class_name[index_class], heart_rate)
+                            }
+                        ],
+                        "stream": False
                     }
-                )
-
-            if True:
-                st.write(f'##### Hi, :orange[{user_name}]. Berikut adalah hasil dari data yang telah anda inputkan.')
-                with st.container():
-                    for chat in st.session_state.chat_history:
-                        if chat["user"]:
-                            message(chat["user"], is_user=True)
-                        if chat["bot"]:
-                            message(chat["bot"])
-
-                    # assistant_response = ""
-                    user_input = st.chat_input("Type your response here")
-
-                    if user_input:
-                        user_input_json = {
-                            "model": "llama3",
-                            "messages": [
-                                {
-                                    "role": "user",
-                                    "content": continous_prompt(user_input)
-                                }
-                            ],
-                            "stream": False
+                    response = get_response(conclusion_json)
+                    st.session_state.chat_history.append(
+                        {
+                            "user": None,
+                            "bot": response
                         }
-                        bot_response = get_response(user_input_json)
-                        st.session_state.chat_history.append({"user": user_input, "bot": bot_response})
+                    )
 
-                        st.rerun()
-                
-                st.write('#### Thank you, for stepping by. Hope you a better soul :relieved:')
-                next_step()
-        else: 
-            st.write('#### :red[Complete your data on] :orange[Pulse Monitor.]')
+                if True:
+                    st.write(f'##### Hi, :orange[{user_name}]. Berikut adalah hasil dari data yang telah anda inputkan.')
+                    with st.container():
+                        for chat in st.session_state.chat_history:
+                            if chat["user"]:
+                                message(chat["user"], is_user=True)
+                            if chat["bot"]:
+                                message(chat["bot"])
+
+                        # assistant_response = ""
+                        user_input = st.chat_input("Type your response here")
+
+                        if user_input:
+                            user_input_json = {
+                                "model": "llama3",
+                                "messages": [
+                                    {
+                                        "role": "user",
+                                        "content": continous_prompt(user_input)
+                                    }
+                                ],
+                                "stream": False
+                            }
+                            bot_response = get_response(user_input_json)
+                            st.session_state.chat_history.append({"user": user_input, "bot": bot_response})
+
+                            st.rerun()
+                    
+                    st.write('#### Thank you, for stepping by. Hope you a better soul :relieved:')
+                    next_step()
+            else: 
+                st.write('#### :red[Complete your data on] :orange[Pulse Monitor.]')
 
 elif selected == "Our Team":
     def display_member(image_path, name, major, link):

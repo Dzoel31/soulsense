@@ -27,12 +27,40 @@
 ## How to run
 
 1. Clone the repository
-2. Install the dependencies
+2. Create python virtual environment
+
+    ```bash
+    python -m venv venv
+    ```
+
+    ```bash
+    source venv/bin/activate
+    ```
+
+    or
+
+    ```bash
+    venv\Scripts\activate
+    ```
+
+    on Windows
+
+3. Install the dependencies
 
     ```bash
     pip install -r requirements.txt
     ```
 
-3. Setup environment variables (copy the `.env.example` file to `.env` and fill in the values)
-4. Run the Flask server
-5. Run the Streamlit app
+4. Setup environment variables (copy the `.env.example` file to `.env` and fill in the values)
+
+    for `IP4_ADDRESS`, you can run
+
+    ```bash
+    ipconfig
+    ```
+
+    to get the IP address of the machine
+5. For `USER` and `PASSWORD`, you should have a MongoDB account. You can create one [here](https://www.mongodb.com),create a cluster and get the connection string.
+6. Run the Flask server
+7. Run the Streamlit app
+8. Go to http://localhost:8501 to view the web app
